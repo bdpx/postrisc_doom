@@ -158,7 +158,7 @@ byte *I_ZoneBase (int *size)
     zonemem = AutoAllocMemory(size, default_ram, min_ram);
 
     printf("zone memory: %p, %x allocated for zone\n", 
-           zonemem, *size);
+           (void*)zonemem, *size);
 
     return zonemem;
 }
