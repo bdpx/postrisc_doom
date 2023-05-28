@@ -66,7 +66,7 @@
 
 // Use builtin bool type with C++.
 
-typedef unsigned char boolean;
+typedef unsigned int boolean;
 
 #else
 
@@ -75,7 +75,7 @@ typedef enum
 {
     false	= 0,
     true	= 1,
-	undef	= 0xFFFFFFFF
+    undef	= 0x7FFFFFFF
 } boolean;
 #endif
 
