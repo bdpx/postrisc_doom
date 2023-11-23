@@ -159,19 +159,30 @@ void cmap_to_fb(uint8_t * out, uint8_t * in, int in_pixels)
     uint32_t pix;
     uint16_t r, g, b;
 
+    int const bits_per_pixel = s_Fb.bits_per_pixel;
+    int const scaling = fb_scaling;
+
+    int const red_offset = s_Fb.red.offset;
+    int const green_offset = s_Fb.green.offset;
+    int const blue_offset = s_Fb.blue.offset;
+
+    int const red_shift   = (8 - s_Fb.red.length);
+    int const green_shift = (8 - s_Fb.green.length);
+    int const blue_shift  = (8 - s_Fb.blue.length);
+
     for (i = 0; i < in_pixels; i++)
     {
         c = colors[*in];  /* R:8 G:8 B:8 format! */
-        r = (uint16_t)(c.r >> (8 - s_Fb.red.length));
-        g = (uint16_t)(c.g >> (8 - s_Fb.green.length));
-        b = (uint16_t)(c.b >> (8 - s_Fb.blue.length));
-        pix = r << s_Fb.red.offset;
-        pix |= g << s_Fb.green.offset;
-        pix |= b << s_Fb.blue.offset;
+        r = (uint16_t)(c.r >> red_shift);
+        g = (uint16_t)(c.g >> green_shift);
+        b = (uint16_t)(c.b >> blue_shift);
+        pix = r << red_offset;
+        pix |= g << green_offset;
+        pix |= b << blue_offset;
 
-        for (k = 0; k < fb_scaling; k++) {
-            for (j = 0; j < s_Fb.bits_per_pixel/8; j++) {
-                *out = (pix >> (j*8));
+        for (k = 0; k < scaling; k++) {
+            for (j = 0; j < bits_per_pixel; j+=8) {
+                *out = (pix >> j);
                 out++;
             }
         }
